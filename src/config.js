@@ -1,1 +1,1 @@
-export const WHATSAPP_NUMBER = "94771234567";
+export const WHATSAPP_NUMBER = "94769856605";

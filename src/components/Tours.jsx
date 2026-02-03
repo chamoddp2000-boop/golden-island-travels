@@ -13,9 +13,9 @@ const tours = [
     locations: ['Sigiriya', 'Dambulla', 'Kandy', 'Polonnaruwa'],
     description: 'Immerse yourself in 2500 years of history. Visit ancient kingdoms, climb the majestic Sigiriya Rock Fortress, and explore the Golden Temple of Dambulla.',
     itinerary: [
-      { day: 'Day 1', title: 'Arrival & Transfer to Sigiriya', desc: 'Pick up from Airport. Relax at hotel using our luxury fleet.' },
-      { day: 'Day 2', title: 'Sigiriya & Village Cookery Class', desc: 'Morning climb of Sigiriya Lion Rock. Lunch: Traditional Village Cookery Class experience.' },
-      { day: 'Day 3', title: 'Dambulla & Spice/Gem Visit', desc: 'Visit Dambulla Cave Temple. Stop at a Matale Spice Garden & Batik Factory.' },
+      { day: 'Day 1', title: 'Arrival & Transfer', desc: 'Pick up from Airport and drive to Polonnaruwa. Relax at hotel after the journey.' },
+      { day: 'Day 2', title: 'Polonnaruwa & Village Life', desc: 'Explore the ancient city of Polonnaruwa. Experience a traditional Local Village Tour activity.' },
+      { day: 'Day 3', title: 'Sigiriya, Dambulla & Safari', desc: 'Climb Sigiriya Rock, visit Dambulla Cave Temple, and enjoy a Minneriya/Kawdulla National Park Safari.' },
       { day: 'Day 4', title: 'Kandy City & Gems', desc: 'Temple of the Tooth, Botanical Gardens, and visit a certified Gem Museum & Showroom.' },
       { day: 'Day 5', title: 'Departure', desc: 'Transfer to Airport or next destination.' }
     ]
