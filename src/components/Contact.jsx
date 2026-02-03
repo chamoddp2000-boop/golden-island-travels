@@ -18,7 +18,7 @@ const Contact = () => {
                             <div className="info-icon"><Phone size={24} /></div>
                             <div>
                                 <h4>Call / WhatsApp</h4>
-                                <p>+94 77 123 4567</p>
+                                <p>+{WHATSAPP_NUMBER}</p>
                             </div>
                         </div>
 

@@ -102,7 +102,7 @@ const Reviews = () => {
 
         } catch (error) {
             console.error('Error submitting review:', error.message);
-            alert('Failed to submit review. Please try again.');
+            alert(`Failed to submit review: ${error.message}`);
         } finally {
             setSubmitting(false);
         }
