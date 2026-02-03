@@ -1,5 +1,6 @@
 import { MapPin, Clock, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
+import { WHATSAPP_NUMBER } from '../config';
 import sigiriyaImg from '../assets/sigiriya.png';
 import ellaImg from '../assets/ella_train.png';
 import mirissaImg from '../assets/mirissa.png';
@@ -112,7 +113,7 @@ const Tours = () => {
                       </div>
                     ))}
                     <div className="text-center mt-3">
-                      <a href="https://wa.me/YOUR_NUMBER" className="btn btn-primary btn-sm">Book This Tour</a>
+                      <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="btn btn-primary btn-sm">Book This Tour</a>
                     </div>
                   </div>
                 )}

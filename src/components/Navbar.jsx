@@ -1,72 +1,73 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Phone } from 'lucide-react';
+import { WHATSAPP_NUMBER } from '../config';
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    const navLinks = [
-        { name: 'Home', href: '#' },
-        { name: 'Services', href: '#services' },
-        { name: 'Tours', href: '#tours' },
-        { name: 'About', href: '#about' },
-        { name: 'Contact', href: '#contact' },
-    ];
+  const navLinks = [
+    { name: 'Home', href: '#' },
+    { name: 'Services', href: '#services' },
+    { name: 'Tours', href: '#tours' },
+    { name: 'About', href: '#about' },
+    { name: 'Contact', href: '#contact' },
+  ];
 
-    return (
-        <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-            <div className="container nav-container">
-                <div className="logo">
-                    <span className="text-gold">Golden Island</span> Travels
-                </div>
+  return (
+    <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
+      <div className="container nav-container">
+        <div className="logo">
+          <span className="text-gold">Golden Island</span> Travels
+        </div>
 
-                {/* Desktop Menu */}
-                <div className="desktop-menu">
-                    {navLinks.map((link) => (
-                        <a key={link.name} href={link.href} className="nav-link">
-                            {link.name}
-                        </a>
-                    ))}
-                    <a href="https://wa.me/YOUR_NUMBER" className="btn btn-primary btn-sm">
-                        <Phone size={18} style={{ marginRight: '8px' }} />
-                        Book Now
-                    </a>
-                </div>
+        {/* Desktop Menu */}
+        <div className="desktop-menu">
+          {navLinks.map((link) => (
+            <a key={link.name} href={link.href} className="nav-link">
+              {link.name}
+            </a>
+          ))}
+          <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="btn btn-primary btn-sm">
+            <Phone size={18} style={{ marginRight: '8px' }} />
+            Book Now
+          </a>
+        </div>
 
-                {/* Mobile Menu Toggle */}
-                <div className="mobile-toggle" onClick={() => setIsOpen(!isOpen)}>
-                    {isOpen ? <X size={28} /> : <Menu size={28} />}
-                </div>
+        {/* Mobile Menu Toggle */}
+        <div className="mobile-toggle" onClick={() => setIsOpen(!isOpen)}>
+          {isOpen ? <X size={28} /> : <Menu size={28} />}
+        </div>
 
-                {/* Mobile Menu */}
-                {isOpen && (
-                    <div className="mobile-menu">
-                        {navLinks.map((link) => (
-                            <a
-                                key={link.name}
-                                href={link.href}
-                                className="mobile-nav-link"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                {link.name}
-                            </a>
-                        ))}
-                        <a href="https://wa.me/YOUR_NUMBER" className="btn btn-primary" style={{ marginTop: '20px' }}>
-                            Book via WhatsApp
-                        </a>
-                    </div>
-                )}
-            </div>
+        {/* Mobile Menu */}
+        {isOpen && (
+          <div className="mobile-menu">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className="mobile-nav-link"
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </a>
+            ))}
+            <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="btn btn-primary" style={{ marginTop: '20px' }}>
+              Book via WhatsApp
+            </a>
+          </div>
+        )}
+      </div>
 
-            <style>{`
+      <style>{`
         .navbar {
           position: fixed;
           top: 0;
@@ -164,8 +165,8 @@ const Navbar = () => {
           }
         }
       `}</style>
-        </nav>
-    );
+    </nav>
+  );
 };
 
 export default Navbar;

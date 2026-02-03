@@ -1,5 +1,6 @@
 import { Star, MessageCircle, X, Send } from 'lucide-react';
 import { useState } from 'react';
+import { WHATSAPP_NUMBER } from '../config';
 
 const initialReviews = [
     {
@@ -29,7 +30,7 @@ const Reviews = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const text = `*New Review for Golden Island Travels*%0A%0A*Name:* ${newReview.name}%0A*Rating:* ${'⭐'.repeat(newReview.rating)}%0A*Message:* ${newReview.message}`;
-        window.open(`https://wa.me/YOUR_NUMBER?text=${text}`, '_blank');
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
         setIsModalOpen(false);
         setNewReview({ name: '', rating: 5, message: '' });
     };

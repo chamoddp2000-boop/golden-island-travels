@@ -1,4 +1,5 @@
 import { Phone, Mail, MapPin, Send } from 'lucide-react';
+import { WHATSAPP_NUMBER } from '../config';
 
 const Contact = () => {
     return (
@@ -37,7 +38,7 @@ const Contact = () => {
                             </div>
                         </div>
 
-                        <a href="https://wa.me/YOUR_NUMBER" className="btn btn-primary mt-4">
+                        <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="btn btn-primary mt-4">
                             Chat on WhatsApp
                         </a>
                     </div>

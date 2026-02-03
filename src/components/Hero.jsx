@@ -35,9 +35,7 @@ const Hero = () => {
           background-position: center;
           background-attachment: fixed; /* Parallax effect */
         }
-          background-position: center;
-          background-attachment: fixed; /* Parallax effect */
-        }
+
 
         .hero-overlay {
           position: absolute;
@@ -99,6 +97,16 @@ const Hero = () => {
         }
 
         @media (max-width: 768px) {
+          .hero {
+            background-attachment: scroll; /* Disable parallax on mobile */
+            min-height: 100vh; /* Handle dynamic toolbars better */
+            height: auto;
+          }
+
+          .hero-overlay {
+            background: linear-gradient(to bottom, rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.95)); /* Much darker on mobile */
+          }
+
           .hero-title {
             font-size: 3rem;
           }
