@@ -4,6 +4,7 @@ import Services from './components/Services';
 import Tours from './components/Tours';
 import Activities from './components/Activities';
 import Reviews from './components/Reviews';
+import Gallery from './components/Gallery';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 
@@ -16,6 +17,7 @@ function App() {
       <Tours />
       <Activities />
       <Reviews />
+      <Gallery />
 
       <section id="about" className="section bg-darker" style={{ padding: '80px 0' }}>
         <div className="container text-center">
