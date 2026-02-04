@@ -14,18 +14,18 @@ const Gallery = () => {
     const fetchPhotos = async () => {
         try {
             setLoading(true);
-            // Fetch reviews that have photos
+            // Fetch reviews that have photos (check content length)
             const { data, error } = await supabase
                 .from('reviews')
                 .select('photos, name')
-                .not('photos', 'is', null);
+                .not('photos', 'is', null)
 
             if (error) throw error;
 
             // Flatten the photos array
             const allPhotos = [];
             data?.forEach(review => {
-                if (review.photos && Array.isArray(review.photos)) {
+                if (review.photos && Array.isArray(review.photos) && review.photos.length > 0) {
                     review.photos.forEach(photoUrl => {
                         allPhotos.push({
                             url: photoUrl,
@@ -134,7 +134,7 @@ const Gallery = () => {
                     width: 100%;
                     height: 100%;
                     background: rgba(0,0,0,0.95);
-                    z-index: 3000;
+                    z-index: 10000;
                     display: flex;
                     flex-direction: column;
                     align-items: center;

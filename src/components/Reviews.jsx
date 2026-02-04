@@ -398,7 +398,7 @@ const Reviews = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 2000;
+          z-index: 9999;
           backdrop-filter: blur(5px);
           animation: fadeIn 0.3s ease;
         }
@@ -407,7 +407,8 @@ const Reviews = () => {
             .modal-content {
                 padding: 25px;
                 width: 95%;
-                max-height: 90vh;
+                height: 100%;
+                z-index: 10;
                 overflow-y: auto;
             }
         }
