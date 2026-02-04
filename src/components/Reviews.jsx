@@ -42,8 +42,13 @@ const Reviews = () => {
 
     const handleFileChange = (e) => {
         if (e.target.files) {
-            setPhotos(Array.from(e.target.files));
+            const newFiles = Array.from(e.target.files);
+            setPhotos(prev => [...prev, ...newFiles]);
         }
+    };
+
+    const removePhoto = (index) => {
+        setPhotos(prev => prev.filter((_, i) => i !== index));
     };
 
     const uploadPhotos = async () => {
@@ -251,6 +256,21 @@ const Reviews = () => {
                             {/* Photo Upload */}
                             <div className="form-group">
                                 <label>Add Photos (Optional)</label>
+
+                                {/* Photo Previews */}
+                                {photos.length > 0 && (
+                                    <div className="photo-previews">
+                                        {photos.map((file, index) => (
+                                            <div key={index} className="preview-item">
+                                                <img src={URL.createObjectURL(file)} alt="preview" />
+                                                <button type="button" onClick={() => removePhoto(index)} className="remove-photo">
+                                                    <X size={12} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
                                 <div className="file-input-wrapper">
                                     <input
                                         type="file"
@@ -262,7 +282,7 @@ const Reviews = () => {
                                     />
                                     <label htmlFor="photo-upload" className="file-label">
                                         <ImageIcon size={20} />
-                                        <span>{photos.length > 0 ? `${photos.length} photos selected` : "Click to select photos"}</span>
+                                        <span>Add Photos</span>
                                     </label>
                                 </div>
                             </div>
@@ -480,6 +500,44 @@ const Reviews = () => {
         @keyframes slideUp {
             from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
+        }
+
+        .photo-previews {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .preview-item {
+            position: relative;
+            width: 60px;
+            height: 60px;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .remove-photo {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
         }
       `}</style>
         </section>
