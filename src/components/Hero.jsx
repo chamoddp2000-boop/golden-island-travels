@@ -1,7 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import heroBg from '../assets/hero_bg.png';
 
-const Hero = () => {
+const Hero = ({ onPlanClick }) => {
   return (
     <section className="hero">
       <div className="hero-overlay"></div>
@@ -13,9 +13,9 @@ const Hero = () => {
           Experience the freedom of a private car, the insight of a local expert, and the luxury of a fully customized Sri Lanka itinerary.
         </p>
         <div className="hero-buttons">
-          <a href="#contact" className="btn btn-primary">
+          <button onClick={onPlanClick} className="btn btn-primary">
             Plan My Trip <ArrowRight size={20} style={{ marginLeft: '10px' }} />
-          </a>
+          </button>
           <a href="#tours" className="btn btn-outline">
             View Popular Tours
           </a>

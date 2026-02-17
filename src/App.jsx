@@ -1,6 +1,9 @@
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import HowItWorks from './components/HowItWorks';
+import WhatsAppButton from './components/WhatsAppButton';
+import QuoteModal from './components/QuoteModal';
+import { useState } from 'react';
 import Services from './components/Services';
 import Tours from './components/Tours';
 import Activities from './components/Activities';
@@ -10,10 +13,14 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 
 function App() {
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+
   return (
     <div className="app">
       <Navbar />
-      <Hero />
+      <Hero onPlanClick={() => setIsQuoteModalOpen(true)} />
+      <WhatsAppButton />
+      <QuoteModal isOpen={isQuoteModalOpen} onClose={() => setIsQuoteModalOpen(false)} />
       <HowItWorks />
       <Services />
       <Tours />
