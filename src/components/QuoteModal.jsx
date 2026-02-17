@@ -16,15 +16,21 @@ const QuoteModal = ({ isOpen, onClose }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+
         // Format message for WhatsApp
         const text = `
-*New Trip Inquiry* 🌴
-Name: ${formData.name}
-Arrival: ${formData.arrivalDate}
-Duration: ${formData.duration} days
-Group Size: ${formData.pax}
-Vehicle: ${formData.vehicle}
-Notes: ${formData.message}
+*🌴 New Trip Inquiry - Golden Island Travels*
+--------------------------------------------------
+👤 *Name:* ${formData.name}
+📅 *Arrival Date:* ${formData.arrivalDate}
+⏳ *Duration:* ${formData.duration} Days
+👥 *Group Size:* ${formData.pax}
+🚗 *Vehicle Pref:* ${formData.vehicle}
+
+📝 *Inquiry Details:* 
+${formData.message || "No specific details provided yet."}
+--------------------------------------------------
+*Sent from website quote form*
         `.trim();
 
         const encodedText = encodeURIComponent(text);
@@ -129,6 +135,13 @@ Notes: ${formData.message}
                     display: grid;
                     grid-template-columns: 1fr 1fr;
                     gap: 15px;
+                }
+                
+                @media (max-width: 600px) {
+                    .form-row {
+                        grid-template-columns: 1fr;
+                        gap: 10px;
+                    }
                 }
                 .subtitle {
                     color: var(--color-gray-300);
