@@ -1,5 +1,6 @@
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import HowItWorks from './components/HowItWorks';
 import Services from './components/Services';
 import Tours from './components/Tours';
 import Activities from './components/Activities';
@@ -13,6 +14,7 @@ function App() {
     <div className="app">
       <Navbar />
       <Hero />
+      <HowItWorks />
       <Services />
       <Tours />
       <Activities />

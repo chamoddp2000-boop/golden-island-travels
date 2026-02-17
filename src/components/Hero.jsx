@@ -7,10 +7,10 @@ const Hero = () => {
       <div className="hero-overlay"></div>
       <div className="container hero-content text-center">
         <h1 className="hero-title">
-          Explore <span className="text-gold">Sri Lanka</span> <br /> with Comfort & Style
+          Your <span className="text-gold">Private Chauffeur</span> & Guide for an Unforgettable Journey
         </h1>
         <p className="hero-subtitle">
-          Your trusted partner for premium transport, expert guides, and unforgettable island tours.
+          Experience the freedom of a private car, the insight of a local expert, and the luxury of a fully customized Sri Lanka itinerary.
         </p>
         <div className="hero-buttons">
           <a href="#contact" className="btn btn-primary">

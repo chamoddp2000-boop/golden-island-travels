@@ -1,4 +1,4 @@
-import { Star, MessageCircle, X, Send, Image as ImageIcon, Loader } from 'lucide-react';
+import { Star, MessageCircle, X, Send, Image as ImageIcon, Loader, Pencil } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
@@ -7,6 +7,7 @@ const Reviews = () => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [editingReviewId, setEditingReviewId] = useState(null);
 
     // Form State
     const [newReview, setNewReview] = useState({
@@ -32,7 +33,14 @@ const Reviews = () => {
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
-            setReviews(data || []);
+
+            // Check for edit permissions
+            const processedReviews = (data || []).map(review => ({
+                ...review,
+                isEditable: !!localStorage.getItem(`review_token_${review.id}`)
+            }));
+
+            setReviews(processedReviews);
         } catch (error) {
             console.error('Error fetching reviews:', error.message);
         } finally {
@@ -74,36 +82,81 @@ const Reviews = () => {
         return uploadedUrls;
     };
 
+    const handleEditClick = (review) => {
+        setNewReview({
+            name: review.name,
+            email: review.email,
+            visit_date: review.visit_date,
+            rating: review.rating,
+            message: review.message
+        });
+        setPhotos([]); // Reset photos for now as we don't support editing them yet
+        setEditingReviewId(review.id);
+        setIsModalOpen(true);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitting(true);
 
         try {
-            // 1. Upload Photos first
-            const photoUrls = await uploadPhotos();
+            if (editingReviewId) {
+                // Update Existing Review
+                const token = localStorage.getItem(`review_token_${editingReviewId}`);
+                if (!token) throw new Error("Permission denied");
 
-            // 2. Insert Review Data
-            const { error } = await supabase
-                .from('reviews')
-                .insert([
-                    {
-                        name: newReview.name,
-                        email: newReview.email,
-                        visit_date: newReview.visit_date,
-                        rating: newReview.rating,
-                        message: newReview.message,
-                        photos: photoUrls
-                    }
-                ]);
+                const { error } = await supabase.rpc('update_review', {
+                    p_id: editingReviewId,
+                    p_token: token,
+                    p_name: newReview.name,
+                    p_rating: newReview.rating,
+                    p_message: newReview.message,
+                    p_visit_date: newReview.visit_date
+                });
 
-            if (error) throw error;
+                if (error) throw error;
+
+            } else {
+                // Create New Review
+                // 1. Upload Photos first
+                const photoUrls = await uploadPhotos();
+
+                // Generate token for future edits
+                const editToken = crypto.randomUUID();
+
+                // 2. Insert Review Data
+                const { data, error } = await supabase
+                    .from('reviews')
+                    .insert([
+                        {
+                            name: newReview.name,
+                            email: newReview.email,
+                            visit_date: newReview.visit_date,
+                            rating: newReview.rating,
+                            message: newReview.message,
+                            photos: photoUrls,
+                            edit_token: editToken
+                        }
+                    ])
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                // Save token to local storage
+                if (data) {
+                    localStorage.setItem(`review_token_${data.id}`, editToken);
+                }
+            }
 
             // 3. Reset and Refresh
             setIsModalOpen(false);
             setNewReview({ name: '', email: '', visit_date: '', rating: 5, message: '' });
             setPhotos([]);
+            setEditingReviewId(null);
             fetchReviews(); // Refresh list to show new review
-            alert('Thank you for your review!');
+            fetchReviews(); // Refresh list to show new review
+            alert(editingReviewId ? 'Review updated successfully!' : 'Thank you for your review!');
 
         } catch (error) {
             console.error('Error submitting review:', error.message);
@@ -171,7 +224,12 @@ const Reviews = () => {
                 )}
 
                 <div className="text-center mt-5">
-                    <button onClick={() => setIsModalOpen(true)} className="btn btn-outline-gold">
+                    <button onClick={() => {
+                        setEditingReviewId(null);
+                        setNewReview({ name: '', email: '', visit_date: '', rating: 5, message: '' });
+                        setPhotos([]);
+                        setIsModalOpen(true);
+                    }} className="btn btn-outline-gold">
                         <MessageCircle size={18} style={{ marginRight: '8px' }} />
                         Leave a Review
                     </button>
@@ -185,7 +243,7 @@ const Reviews = () => {
                         <button className="modal-close" onClick={() => setIsModalOpen(false)}>
                             <X size={24} />
                         </button>
-                        <h3>Rate Your Experience</h3>
+                        <h3>{editingReviewId ? 'Edit Your Review' : 'Rate Your Experience'}</h3>
                         <p style={{ color: 'var(--color-gray-500)', fontSize: '0.9rem', marginBottom: '20px' }}>
                             Your feedback means the world to us!
                         </p>
@@ -253,42 +311,45 @@ const Reviews = () => {
                                 ></textarea>
                             </div>
 
-                            {/* Photo Upload */}
-                            <div className="form-group">
-                                <label>Add Photos (Optional)</label>
+                            {/* Photo Upload (Only for new reviews for now) */}
+                            {!editingReviewId && (
+                                <div className="form-group">
+                                    <label>Add Photos (Optional)</label>
 
-                                {/* Photo Previews */}
-                                {photos.length > 0 && (
-                                    <div className="photo-previews">
-                                        {photos.map((file, index) => (
-                                            <div key={index} className="preview-item">
-                                                <img src={URL.createObjectURL(file)} alt="preview" />
-                                                <button type="button" onClick={() => removePhoto(index)} className="remove-photo">
-                                                    <X size={12} />
-                                                </button>
-                                            </div>
-                                        ))}
+                                    {/* Photo Previews */}
+                                    {photos.length > 0 && (
+                                        <div className="photo-previews">
+                                            {photos.map((file, index) => (
+                                                <div key={index} className="preview-item">
+                                                    <img src={URL.createObjectURL(file)} alt="preview" />
+                                                    <button type="button" onClick={() => removePhoto(index)} className="remove-photo">
+                                                        <X size={12} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    <div className="file-input-wrapper">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            multiple
+                                            onChange={handleFileChange}
+                                            id="photo-upload"
+                                            style={{ display: 'none' }}
+                                        />
+                                        <label htmlFor="photo-upload" className="file-label">
+                                            <ImageIcon size={20} />
+                                            <span>Add Photos</span>
+                                        </label>
                                     </div>
-                                )}
 
-                                <div className="file-input-wrapper">
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        multiple
-                                        onChange={handleFileChange}
-                                        id="photo-upload"
-                                        style={{ display: 'none' }}
-                                    />
-                                    <label htmlFor="photo-upload" className="file-label">
-                                        <ImageIcon size={20} />
-                                        <span>Add Photos</span>
-                                    </label>
                                 </div>
-                            </div>
+                            )}
 
                             <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={submitting}>
-                                {submitting ? 'Submitting...' : 'Submit Review'}
+                                {submitting ? 'Submitting...' : (editingReviewId ? 'Update Review' : 'Submit Review')}
                                 {!submitting && <Send size={18} style={{ marginLeft: '8px' }} />}
                             </button>
                         </form>
@@ -314,6 +375,30 @@ const Reviews = () => {
           transition: transform 0.3s ease;
           display: flex;
           flex-direction: column;
+          position: relative;
+        }
+
+        .edit-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--color-gold);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            z-index: 2;
+        }
+        
+        .edit-btn:hover {
+            background: var(--color-gold);
+            color: var(--color-darker);
         }
 
         .review-card:hover {
