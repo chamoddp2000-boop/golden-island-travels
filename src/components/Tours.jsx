@@ -112,19 +112,29 @@ const Tours = () => {
                         </div>
                       </div>
                     ))}
-                    <div className="text-center mt-3">
-                      <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="btn btn-primary btn-sm">Book This Tour</a>
+                    <div className="tour-actions">
+                      <a
+                        href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi! I'd like to book the ${tour.title} tour.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-primary btn-sm"
+                      >
+                        Book This Tour
+                      </a>
+                      <a
+                        href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hi! I am interested in the ${tour.title} tour but I'd like to customize it.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-outline-gold btn-sm"
+                      >
+                        Customize on WhatsApp
+                      </a>
                     </div>
                   </div>
                 )}
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="text-center" style={{ marginTop: '50px' }}>
-          <p style={{ marginBottom: '20px', color: 'var(--color-gray-300)' }}>Want to change day 3? Or add a beach day?</p>
-          <a href="#contact" className="btn btn-primary">Customize This Trip</a>
         </div>
       </div>
 
@@ -263,6 +273,28 @@ const Tours = () => {
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tour-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tour-actions .btn {
+            flex: 1;
+            white-space: nowrap;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 480px) {
+            .tour-actions {
+                flex-direction: column;
+            }
         }
       `}</style>
     </section>
